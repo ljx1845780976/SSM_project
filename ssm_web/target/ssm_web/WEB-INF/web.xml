@@ -1,0 +1,75 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+  <!--配置该listener用于获取访问的ip地址-->
+  <listener>
+    <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+  </listener>
+  <!--配置spring的监听器让spring整合springMVC但是系统默认只加载WEB-INF里的xml文件-->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <!--所以为了加载到applicationContext.xml，需要配置文件路径-->
+   <context-param>
+     <param-name>contextConfigLocation</param-name>
+     <param-value>classpath*:ApplicationContext.xml,classpath*:springSecurity.xml</param-value>
+   </context-param>
+
+  <!--配置前端控制器-->
+  <servlet>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:SpringMVC.xml</param-value>
+    </init-param>
+     <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <url-pattern>/</url-pattern>
+<!--    <url-pattern>*.do</url-pattern>-->
+  </servlet-mapping>
+  
+  <!--解决中文乱码-->
+   <filter>
+     <filter-name>characterEncodingFilter</filter-name>
+     <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+<init-param>
+  <param-name>encoding</param-name>
+  <param-value>UTF-8</param-value>
+</init-param>
+   </filter>
+  <filter-mapping>
+    <filter-name>characterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <!--配置springSecurity，名字必须为springSecurityFilterChain-->
+<filter>
+  <filter-name>springSecurityFilterChain</filter-name>
+  <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+</filter>
+  <filter-mapping>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+
+  <error-page>
+    <error-code>403</error-code>
+    <location>/403.jsp</location>
+  </error-page>
+  
+
+<!--  <welcome-file-list>-->
+<!--    <welcome-file>index.html</welcome-file>-->
+<!--    <welcome-file>index.htm</welcome-file>-->
+<!--    <welcome-file>index.jsp</welcome-file>-->
+<!--    <welcome-file>default.html</welcome-file>-->
+<!--    <welcome-file>default.htm</welcome-file>-->
+<!--    <welcome-file>default.jsp</welcome-file>-->
+<!--  </welcome-file-list>-->
+</web-app>

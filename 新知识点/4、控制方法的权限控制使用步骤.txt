@@ -1,0 +1,24 @@
+方法一：用JSR-250
+1.加入依赖
+              <dependency>
+                  <groupId>javax.annotation</groupId>
+                  <artifactId>jsr250-api</artifactId>
+                  <version>1.0</version>
+              </dependency>
+2.在springSecurity.xml中开启
+      <security:global-method-security jsr250-annotations="enabled"/>
+3.在方法上加上允许访问的权限(JSR的要与数据库的角色名一致)
+   @RequestMapping("/test")
+   @RolesAllowed("ADMIN")
+   public void test(){}
+4.在springMVC.xml中加入
+       <aop:aspectj-autoproxy proxy-target-class="true"></aop:aspectj-autoproxy>
+方法二：用spring自带的secured
+1.在springSecurity.xml中开启
+        <security:global-method-security secured-annotations="enabled"/>
+2. 在方法上允许访问的权限(secured要与springSecurity.xml里的access属性值一致)
+    @RequestMapping("/test")
+       @RolesAllowed("ROLE_ADMIN")
+       public void test(){}
+3.在springMVC.xml中加入
+         <aop:aspectj-autoproxy proxy-target-class="true"></aop:aspectj-autoproxy>

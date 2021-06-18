@@ -1,0 +1,10 @@
+一、在有转换的controller类中 写上
+      @InitBinder
+      public void initBinder(WebDataBinder binder){
+          binder.registerCustomEditor(Date.class,new DateStringEditor());
+      }
+二、在工具类中写一个DateStringEditor类继承PropertiesEditor类并重写setAsText方法，在方法里转换
+
+这样就不用在每个domain类里的Date型属性上加注解，从而完成前端页面传入日期的字符串自动转换成Date类封装值controller方法里
+
+注意：实际上其实在每个domain类上写注解更加方便-_-!，所以上面基本可忽略

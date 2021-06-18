@@ -1,0 +1,20 @@
+1.导入依赖
+         <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+            <version>5.0.10.RELEASE</version>
+         </dependency>
+2.在jsp页面中导入标签
+         <%@taglib  uri="http://www.springframework.org/security/tags" prefix="security"%>
+3.在页面上使用标签
+   3.1 authentication :可用与获取当前正在操作的用户信息
+          例如：获取当前正在操作的用户名
+           <security:authentication property="principal.username"></security:authentication>
+
+   3.2 authorize :用于控制页面上某些标签是否可用显示
+          前提： 用之前要做springSecurity.xml中配置
+                     <bean id="webSecurityExpressionHandler" class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler"/>
+          例如：有admin，user角色才显示里面内容
+          <security:authorize access="hasAnyRole('ADMIN','USER')">
+               jsp内容···
+          </security>

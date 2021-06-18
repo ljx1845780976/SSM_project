@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security.xsd">
+    <!--开启secured,jsr-250-->
+    <security:global-method-security secured-annotations="enabled" jsr250-annotations="enabled"></security:global-method-security>
+
+    <!--配置不被过滤的资源（静态资源及登录相关的）-->
+    <security:http security="none" pattern="/failure.jsp"/>
+    <security:http security="none" pattern="/login.jsp"/>
+    <security:http security="none" pattern="/css/**"/>
+    <security:http security="none" pattern="/img/**"/>
+    <security:http security="none" pattern="/plugins/**"/>
+
+<security:http auto-config="true" use-expressions="false">
+    <!--配置拦截路径，及访问所需的权限,这里只有拥有user和admin角色的权限才能登录成功，别的角色权限能登录成功但无法访问资源下的所有路径-->
+    <security:intercept-url pattern="/**" access="ROLE_USER,ROLE_ADMIN,ROLE_VISITOR"/>
+    <!--配置登录界面，登录成功界面，失败界面，login-processing-url的值与登录界面上提交表单时的action属性的值一样-->
+  <security:form-login
+          login-page="/login.jsp" login-processing-url="/login"
+          default-target-url="/index.jsp" authentication-failure-url="/failure.jsp"
+           authentication-success-forward-url="/pages/index.jsp"/>
+
+  <security:csrf disabled="true"/>
+  <!--配置注销，invalidate设置销毁session，logout-url设置前端注销超链接的href值-->
+  <security:logout invalidate-session="true" logout-url="/logout" logout-success-url="/login.jsp"/>
+</security:http>
+<!--配置对应的service层-->
+    <security:authentication-manager>
+        <security:authentication-provider user-service-ref="userService">
+            <!--配置加密的方式-->
+            <security:password-encoder ref="passwordEncoder"/>
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+    <!--配置加密类,还需复制一份到ApplicationContext.xml中使userService中声明该类不报错-->
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
+    <!--页面端的权限控制使用标签authorize时需配置-->
+        <bean id="webSecurityExpressionHandler" class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler"/>
+</beans>

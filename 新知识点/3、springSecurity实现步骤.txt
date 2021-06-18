@@ -1,0 +1,7 @@
+1.编写springSecurity.xml配置文件
+2.在web.xml中配置springSecurityFilterChain，还有contextConfigLocation中加上第一步配置的springSecurity文件
+3.编写用户实体类，这里叫UserInfo，因为springSecurity框架里也有一个User类，编写角色类（即管理员，用户，访客等等）
+4.编写UserDao 通过用户名查找返回一个用户使用信息
+5.编写UserService ，获取数据库的用户信息并封装至UserDetails里且放回
+
+具体看每个配置文件及类里的注释

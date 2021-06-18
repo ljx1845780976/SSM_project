@@ -1,0 +1,12 @@
+1.导入依赖
+    <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>5.1.2</version>
+    </dependency>
+2.在ApplicationContext中的sessionFactory中配置信息
+3.在service层的需要分页的方法前加上PageHelper.start(n,m) // 其中n是开始页面值，一般为1，m是每页显示条数
+4.在前端页面jsp中转到控制器方法时加上参数/xxx/findAll?page=1&size=4
+5.在控制器方法加上参数
+(@RequestParam(name = "page",defaultValue = "1")int page,@RequestParam(name = "size",defaultValue = "4") int size)
+并将参数传入find方法中
